@@ -1,0 +1,234 @@
+%%% -*- coding: utf-8 -*-
+
+%%% 目次やリンクは、デフォルトでは赤くなり印刷には向かないので、黒くする。
+%%% （電子書籍用PDFでは、リンクであることがわかるよう赤くしたほうがよい。）
+\hypersetup{colorlinks=false}
+
+%%% 「@<strong>{ ... }」をゴシック体にする（「@<b>{ ... }」は明朝体のまま）。
+\renewcommand{\reviewstrong}[1]{\textbf{\gtfamily\sffamily #1}}
+
+%%% 「@<del>{ ... }」（取り消し線）が効くようにする。
+%%% (See https://qiita.com/takahashim/items/5c1af2941a1ce9fa5919)
+\usepackage{ulem}
+\renewcommand{\reviewstrike}[1]{\sout{#1}}
+%\usepackage{jumoline}
+%\renewcommand{\reviewstrike}[1]{\Middleline{#1}}
+
+%%% ソースコードの表示で使う等幅フォントを変更（好きなのを1つだけ選択）
+%\usepackage{courier}     % 太字がとても目立つ、「1 l」や「0 O」が見分けにくい
+%\usepackage{inconsolata} % 太字が目立つ、「0」に斜線が入るが美しくない
+%\usepackage[scale]{nimbusmononarrow}  % 太字が効かない、「1 l」や「0 O」が見分けにくい
+%\usepackage[scaled]{beramono}  % 太字が目立つ、「'」「`」が見分けにくい
+
+%%% 「//list」や「//cmd」の、キャプションのフォントサイズを小さくしない
+%\renewcommand{\reviewlistcaption}[1]{%
+%  \medskip{\noindent #1}\vspace*{-1.3zw}}
+%\renewcommand{\reviewemlistcaption}[1]{%
+%  \medskip{\noindent #1}\vspace*{-1.3zw}}
+%\renewcommand{\reviewsourcecaption}[1]{%
+%  \medskip{\noindent #1}\vspace*{-1.3zw}}
+%\renewcommand{\reviewcmdcaption}[1]{%
+%  \medskip{\noindent #1}\vspace*{-1.3zw}}
+%\renewcommand{\reviewboxcaption}[1]{%
+%  \medskip{\noindent #1}\vspace*{-1.3zw}}
+
+%%% 「//emlist[][言語名]」のようにキャプションを省略したときに
+%%% 本文とコードとの間の余白が広くなりすぎるバグを回避
+\def \ifempty#1{\def\temp{#1} \ifx\temp\empty }
+\renewcommand{\reviewemlistcaption}[1]{%
+  %\medskip{\small\noindent #1}\vspace*{-1.3zw} %% original
+  \ifempty{#1}
+    %
+  \else
+    \medskip{%
+      \small%  %% キャプションのフォントサイズを小さくする
+      \noindent #1}%
+    \vspace{-1.0zw}
+  \fi
+}
+
+%%% 「//emlist」の上下余白を狭める
+\renewenvironment{reviewemlist}{%
+  %\medskip%           %% original
+  \vspace{-0.3zw}      %% fix
+  \begin{shaded}%
+    \vspace*{-1.0zw}
+    \small%    %% コードのフォントサイズを小さくする
+    \setlength{\baselineskip}{1.3zw}%
+    \begin{alltt}%
+      }{%
+    \end{alltt}%
+    \vspace*{-1.0zw}%
+  \end{shaded}%
+}
+
+%%% 「//list」の上下余白を狭める
+\renewenvironment{reviewlist}{%
+  \begin{shaded}%
+    \vspace*{-1.0zw}%
+    \small%    %% コードのフォントサイズを小さくする
+    \setlength{\baselineskip}{1.3zw}%
+    \begin{alltt}%
+      }{%
+    \end{alltt}%
+    \vspace*{-1.0zw}%
+  \end{shaded}%
+  \par\vspace*{0.5zw}%
+}
+
+%%% 「//source」の上下余白を狭める
+\renewenvironment{reviewsource}{%
+  \begin{shaded}%
+    \vspace*{-1.0zw}%
+    \small%    %% コードのフォントサイズを小さくする
+    \setlength{\baselineskip}{1.3zw}%
+    \begin{alltt}%
+      }{%
+    \end{alltt}%
+    \vspace*{-1.0zw}%
+  \end{shaded}%
+  \par\vspace*{0.5zw}%
+}
+
+%%% 「//cmd」の上下余白を狭める
+\renewenvironment{reviewcmd}{%
+  \color{white}%
+  %\medskip%
+  \small%    %% コードのフォントサイズを小さくする
+  \begin{shadedb}%
+    \vspace*{-1.0zw}%
+    \setlength{\baselineskip}{1.3zw}%
+    \begin{alltt}%
+      }{%
+    \end{alltt}%
+    \vspace*{-1.0zw}%
+  \end{shadedb}%
+}
+
+%%% 「//list」や「//emlist」の枠と文字との隙間を狭くする
+\renewenvironment{shaded}{%
+  %\def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolor}}%
+  \def\FrameCommand{\fboxsep=0.65\FrameSep \colorbox{shadecolor}}%
+  \MakeFramed {\FrameRestore}}%
+ {\endMakeFramed}
+
+%%% 「//cmd」の枠と文字との隙間を狭くする
+\renewenvironment{shadedb}{%
+  %\def\FrameCommand{\fboxsep=\FrameSep \colorbox{shadecolorb}}%
+  \def\FrameCommand{\fboxsep=0.65\FrameSep \colorbox{shadecolorb}}%
+  \MakeFramed {\FrameRestore}}%
+ {\endMakeFramed}
+
+
+%%% チャプター（章）タイトルの上余白を狭める（jsbook.clsからコピー）
+\def\@makechapterhead#1{%
+  %\vspace*{2\Cvs}% 欧文は50pt
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+      \if@mainmatter
+        \huge\headfont \@chapapp\thechapter\@chappos
+        \par\nobreak
+        \vskip \Cvs % 欧文は20pt
+      \fi
+    \fi
+    \interlinepenalty\@M
+    \Huge \headfont #1\par\nobreak
+    \vskip 3\Cvs}} % 欧文は40pt
+
+%%% 目次の上余白を狭める（jsbook.clsからコピー）
+\renewcommand{\tableofcontents}{%
+  \settowidth\jsc@tocl@width{\headfont\prechaptername\postchaptername}%
+  \settowidth\@tempdima{\headfont\appendixname}%
+  \ifdim\jsc@tocl@width<\@tempdima \setlength\jsc@tocl@width{\@tempdima}\fi
+  \ifdim\jsc@tocl@width<2zw \divide\jsc@tocl@width by 2 \advance\jsc@tocl@width 1zw\fi
+  \if@twocolumn
+    \@restonecoltrue\onecolumn
+  \else
+    \@restonecolfalse
+  \fi
+  %
+  %\chapter*{\contentsname}%
+  %% 章も目次も右起こしにする or しない
+  %\if@openleft\cleardoublepage\else
+  %\if@openright\cleardoublepage\else\clearpage\fi\fi
+  %% 章が右起こしでも、目次は右起こしにしない
+  \clearpage
+  %
+  \plainifnotempty
+  \@makechapterhead{\contentsname}
+  %
+  \@mkboth{\contentsname}{}%
+  \@starttoc{toc}%
+  \if@restonecol\twocolumn\fi
+}
+
+
+%%% セクション（節）タイトルのデザインを変更（jsbook.clsからコピーして変更）
+\renewcommand{\section}{%
+  \if@slide\clearpage\fi
+  \@startsection{section}{1}{\z@}%
+  %{\Cvs \@plus.5\Cdp \@minus.2\Cdp}% 前アキ オリジナル
+  %{.5\Cvs \@plus.3\Cdp}% 後アキ オリジナル
+  {1.3\Cvs \@plus.5\Cdp \@minus.2\Cdp}% 前アキ
+  {.7\Cvs \@plus.3\Cdp}% 後アキ
+  %{\normalfont\Large\headfont\raggedright}%   % オリジナル
+  %{\normalfont\Large\headfont\raggedright ■ }% 行頭に「■」を追加するだけ
+  {\normalfont\Large\headfont\raggedright%
+   \rule[-4pt]{\textwidth}{0.2pt}%       % 横幅いっぱいの細い下線
+   \hspace{-\textwidth}%                 % もとの位置に戻る
+   \rule[-4pt]{0.5em}{2.8ex}~            % 行頭に縦長の「■」を追加
+  }%
+}
+
+
+%%% 右起こし（右ページ始まり）のときに、奥付が右ページにこないようにする。
+%%% （奥付が右ページだと、次ページである最終ページが空ページになるため）
+\renewcommand{\reviewcolophon}[0]{%
+  \clearpage
+  \pltx@cleartoleftpage   %% copied from jsbook.sty
+}
+
+%%% ページ番号のフォーマットを変更
+\fancypagestyle{plainhead}{
+  \fancyhead{}
+  \fancyfoot{} % clear all header and footer fields
+  %\fancyfoot[CE,CO]{\thepage}
+  \fancyfoot[C]{--\ \thepage\ --}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+\cfoot{--\ \thepage\ --}
+
+%%% 現在位置に画像が入りきらない場合、画像は次のページに回される。
+%%% その際、現在位置に大きなスペースが空くのを防ぐために、
+%%% 後続のテキストを現在位置に流し込むようにする。
+%\renewenvironment{reviewimage}{%
+%  %\begin{figure}[H]  % 現在位置にスペースが空く（要float.sty）
+%  \begin{figure}[ht]  % 現在位置に後続テキストを流し込む
+%    \begin{center}}{%
+%    \end{center}
+%  \end{figure}}
+%
+%\renewenvironment{reviewdummyimage}{%
+%  %\begin{figure}[H]  % 現在位置にスペースが空く（要float.sty）
+%  \begin{figure}[ht]  % 現在位置に後続テキストを流し込む
+%    \begin{center}\begin{alltt}}{%
+%    \end{alltt}\end{center}
+%  \end{figure}}
+
+
+%% コラムが複数のページにまたがるとき、次のページに続いていることが
+%% わかるようにするために、ページ境界では上下の線を引かない。
+\renewenvironment{reviewcolumn}{%
+     %\begin{framed}
+     \begin{oframed}
+  }{%
+     %\end{framed}
+     \end{oframed}
+  \vspace{2zw}}
+
+%% コラムのタイトルを、太字のゴシック体に変更する
+\renewcommand{\reviewcolumnhead}[2]{%
+  %{\noindent\large ■コラム: #2}%
+  {\noindent\large\bfseries\gtfamily\sffamily ■コラム：#2}%
+}
