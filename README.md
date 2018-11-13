@@ -65,8 +65,6 @@ create pdf as test run:
 docker run --rm -v `pwd`/starterproject:/work kauplan/review2.5 /bin/sh -c "cd /work && review-pdfmaker config.yml"
 ```
 
----
-
 ## using markdown
 
 install [md2review](https://github.com/takahashim/md2review):
@@ -80,5 +78,7 @@ create `.md` file and convert:
 ```bash
 md2review yourfile.md > yourfile.re
 ```
+
+---
 
 enjoy Re:VIEW!!
