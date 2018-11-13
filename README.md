@@ -1,6 +1,7 @@
 # Re:VIEW test
 
 on Mac OSX.  
+ruby as default on Mac that version is 2.3.7.  
 
 ## create environment with docker
 
@@ -10,15 +11,18 @@ install docker and docker-machine if you don't install yet:
 brew install docker docker-machine
 ```
 
-create machine:  
-※ required [VirtualBox](https://www.virtualbox.org/)  
+create machine (required [VirtualBox](https://www.virtualbox.org/)):  
 
 ```bash
 docker-machine create --driver virtualbox default
 ```
 
-install image:  
-※ reference [repository](https://github.com/vvakame/docker-review)  
+use machine (you may need to enter this command when you rebooted your machine):
+```bash
+eval $(docker-machine env)
+```
+
+install image (reference [repository](https://github.com/vvakame/docker-review)):  
 
 ```bash
 docker pull vvakame/review
@@ -62,5 +66,19 @@ docker run --rm -v `pwd`/starterproject:/work kauplan/review2.5 /bin/sh -c "cd /
 ```
 
 ---
+
+## using markdown
+
+install [md2review](https://github.com/takahashim/md2review):
+
+```bash
+gem install md2review
+```
+
+create `.md` file and convert:
+
+```bash
+md2review yourfile.md > yourfile.re
+```
 
 enjoy Re:VIEW!!

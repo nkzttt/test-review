@@ -4,6 +4,7 @@ PREDEF:
 CHAPS:
   - chap01-intro.re
   - chap02-review.re
+  - chap03-withmd.re
 
 APPENDIX:
 
